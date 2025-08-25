@@ -1,0 +1,13 @@
+{
+"name": "buycementonline/buycement-woocommerce-pricing-addon",
+"description": "Per-pincode pricing addon for WooCommerce (OOP, Namespace)",
+"type": "wordpress-plugin",
+"require": {
+"php": ">=7.4"
+},
+"autoload": {
+  "psr-4": {
+    "BuyCement\\WCAddon\\": "src/"
+  }
+}
+}
