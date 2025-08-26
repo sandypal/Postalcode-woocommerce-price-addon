@@ -4,10 +4,14 @@ jQuery(function($){
     const $btn = $(this); const product = $btn.data('product');
     const data = { action: 'bc_wcpa_save_prices', nonce: BCWCPA.nonce, product_id: product, prices: {} };
     $('input[name^="price["]').each(function(){
-      const m = this.name.match(/price\[(\d+)\]\[(retail|trader|bulker)\]/); if(!m) return;
-      const pin = m[1]; const role = m[2]; const val = $(this).val();
-      data.prices[pin] = data.prices[pin] || {}; data.prices[pin][role] = val;
-    });
+  const m = this.name.match(/price\[(\d+)\]\[(guest|retail|trader|bulker|active)\]/);
+  if(!m) return;
+  const pin = m[1];
+  const role = m[2];
+  const val = (role === 'active') ? ($(this).is(':checked') ? 1 : 0) : $(this).val();
+  data.prices[pin] = data.prices[pin] || {};
+  data.prices[pin][role] = val;
+});
     $btn.prop('disabled', true); $('#bc-wcpa-status').text('Saving...');
     $.post(BCWCPA.ajax, data).done(function(){ $('#bc-wcpa-status').text('Saved'); })
       .fail(function(){ $('#bc-wcpa-status').text('Error'); })
