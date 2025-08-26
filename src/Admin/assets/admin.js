@@ -293,7 +293,7 @@ jQuery(function($){
         $postalArea  = $('#bc-postal-area'),
         $postalSub   = $('#bc-postal-subarea'),
         $postalCode  = $('#bc-postal-code');
-
+const $postalcodemessages = $("#bc-postalcode-messages");
   // Load areas into dropdown
   function loadPostalAreas(selectVal){
     return $.post(ajaxPostal, { action:'bc_wcpa_area_options', nonce: noncePostal })
@@ -370,6 +370,10 @@ jQuery(function($){
   // Save Postal (Add/Edit)
   $('#bc-postal-save').on('click', function(){
     const id = $postalId.val();
+    let displayMesg = "Postal Code Added Successfully";
+
+     // container for notices
+    $postalcodemessages.empty(); // clear previous messages
     const data = {
       nonce: noncePostal,
       pincode: $postalCode.val().replace(/[^0-9]/g,''),
@@ -379,6 +383,7 @@ jQuery(function($){
     if(id){
       data.action = 'bc_wcpa_postalcode_edit';
       data.id = id;
+      displayMesg = "Postal Code Updated Successfully";
     } else {
       data.action = 'bc_wcpa_postalcode_add';
     }
@@ -386,6 +391,14 @@ jQuery(function($){
     $.post(ajaxPostal, data)
       .done(function(){
         postalTable.ajax.reload();
+        $postalcodemessages.append(
+                '<div class="notice notice-success is-dismissible"><p>'+displayMesg+'</p></div>'
+            );
+
+            // Auto-hide after 3 seconds (3000 ms)
+            $postalcodemessages.find('.notice').last().delay(3000).fadeOut(500, function(){
+                $(this).remove();
+            });
         $postalModal.hide();
       })
       .fail(function(res){
@@ -396,10 +409,17 @@ jQuery(function($){
   // Delete Postal
   $(document).on('click', '.bc-postal-del', function(){
     if(!confirm('Delete this postal?')) return;
+    $postalcodemessages.empty(); // clear previous messages
 
     $.post(ajaxPostal, { action:'bc_wcpa_postal_delete', nonce: noncePostal, id: $(this).data('id') })
       .done(function(){
         postalTable.ajax.reload();
+        // Show success notice
+          const $notice = $('<div class="notice notice-success is-dismissible"><p>Postal Code deleted successfully!</p></div>');
+          $postalcodemessages.append($notice);
+
+          // Auto-hide after 3 seconds
+          $notice.delay(3000).fadeOut(500, function(){ $(this).remove(); });
       })
       .fail(function(res){
         alert(res.responseJSON?.data?.message || 'Error');

@@ -29,13 +29,12 @@ class ProductPricing {
         $pincodes = $wpdb->get_results("SELECT p.id,p.pincode,a.name as area FROM $pins_t p LEFT JOIN $areas_t a ON a.id=p.area_id ORDER BY a.name, p.pincode");
         $prices = $wpdb->get_results( $wpdb->prepare("SELECT pincode_id, role, price FROM $prices_t WHERE product_id=%d", $post->ID ), OBJECT_K );
         echo '<p>Set specific prices for each pincode and user role. Leave blank to use default product price.</p>';
-        echo '<table class="widefat fixed"><thead><tr><th>Area</th><th>Pincode</th><th>Retail</th><th>Trader</th><th>Bulker</th></tr></thead><tbody>';
+        echo '<table class="widefat fixed"><thead><tr><th>Pincode</th><th>Retail</th><th>Trader</th><th>Bulker</th></tr></thead><tbody>';
         foreach($pincodes as $p){
             $r = $this->get_price_for($prices, $p->id, 'retail');
             $t = $this->get_price_for($prices, $p->id, 'trader');
             $b = $this->get_price_for($prices, $p->id, 'bulker');
             echo '<tr>';
-            echo '<td>'.esc_html($p->area).'</td>';
             echo '<td>'.esc_html($p->pincode).'</td>';
             echo '<td><input type="number" step="0.01" name="price['.intval($p->id).'][retail]" value="'.esc_attr($r).'" /></td>';
             echo '<td><input type="number" step="0.01" name="price['.intval($p->id).'][trader]" value="'.esc_attr($t).'" /></td>';
