@@ -4,10 +4,14 @@ jQuery(function($){
     const $btn = $(this); const product = $btn.data('product');
     const data = { action: 'bc_wcpa_save_prices', nonce: BCWCPA.nonce, product_id: product, prices: {} };
     $('input[name^="price["]').each(function(){
-      const m = this.name.match(/price\[(\d+)\]\[(retail|trader|bulker)\]/); if(!m) return;
-      const pin = m[1]; const role = m[2]; const val = $(this).val();
-      data.prices[pin] = data.prices[pin] || {}; data.prices[pin][role] = val;
-    });
+  const m = this.name.match(/price\[(\d+)\]\[(guest|retail|trader|bulker|active)\]/);
+  if(!m) return;
+  const pin = m[1];
+  const role = m[2];
+  const val = (role === 'active') ? ($(this).is(':checked') ? 1 : 0) : $(this).val();
+  data.prices[pin] = data.prices[pin] || {};
+  data.prices[pin][role] = val;
+});
     $btn.prop('disabled', true); $('#bc-wcpa-status').text('Saving...');
     $.post(BCWCPA.ajax, data).done(function(){ $('#bc-wcpa-status').text('Saved'); })
       .fail(function(){ $('#bc-wcpa-status').text('Error'); })
@@ -293,7 +297,7 @@ jQuery(function($){
         $postalArea  = $('#bc-postal-area'),
         $postalSub   = $('#bc-postal-subarea'),
         $postalCode  = $('#bc-postal-code');
-
+const $postalcodemessages = $("#bc-postalcode-messages");
   // Load areas into dropdown
   function loadPostalAreas(selectVal){
     return $.post(ajaxPostal, { action:'bc_wcpa_area_options', nonce: noncePostal })
@@ -370,6 +374,10 @@ jQuery(function($){
   // Save Postal (Add/Edit)
   $('#bc-postal-save').on('click', function(){
     const id = $postalId.val();
+    let displayMesg = "Postal Code Added Successfully";
+
+     // container for notices
+    $postalcodemessages.empty(); // clear previous messages
     const data = {
       nonce: noncePostal,
       pincode: $postalCode.val().replace(/[^0-9]/g,''),
@@ -379,6 +387,7 @@ jQuery(function($){
     if(id){
       data.action = 'bc_wcpa_postalcode_edit';
       data.id = id;
+      displayMesg = "Postal Code Updated Successfully";
     } else {
       data.action = 'bc_wcpa_postalcode_add';
     }
@@ -386,6 +395,14 @@ jQuery(function($){
     $.post(ajaxPostal, data)
       .done(function(){
         postalTable.ajax.reload();
+        $postalcodemessages.append(
+                '<div class="notice notice-success is-dismissible"><p>'+displayMesg+'</p></div>'
+            );
+
+            // Auto-hide after 3 seconds (3000 ms)
+            $postalcodemessages.find('.notice').last().delay(3000).fadeOut(500, function(){
+                $(this).remove();
+            });
         $postalModal.hide();
       })
       .fail(function(res){
@@ -396,10 +413,17 @@ jQuery(function($){
   // Delete Postal
   $(document).on('click', '.bc-postal-del', function(){
     if(!confirm('Delete this postal?')) return;
+    $postalcodemessages.empty(); // clear previous messages
 
     $.post(ajaxPostal, { action:'bc_wcpa_postal_delete', nonce: noncePostal, id: $(this).data('id') })
       .done(function(){
         postalTable.ajax.reload();
+        // Show success notice
+          const $notice = $('<div class="notice notice-success is-dismissible"><p>Postal Code deleted successfully!</p></div>');
+          $postalcodemessages.append($notice);
+
+          // Auto-hide after 3 seconds
+          $notice.delay(3000).fadeOut(500, function(){ $(this).remove(); });
       })
       .fail(function(res){
         alert(res.responseJSON?.data?.message || 'Error');

@@ -85,3 +85,21 @@
   border-top: 1px solid #ddd;
   padding: 12px 16px;
 }
+
+/* add spacing */
+.bc-wcpa-table th,
+.bc-wcpa-table td {
+    padding: 8px 12px; /* top/bottom, left/right */
+}
+
+/* make number fields more readable */
+.bc-wcpa-table input[type="number"] {
+    width: 100px;
+    margin-right: 8px;
+}
+
+/* space out checkbox */
+.bc-wcpa-table input[type="checkbox"] {
+    transform: scale(1.1);
+    margin-left: 10px;
+}

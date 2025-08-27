@@ -1,0 +1,117 @@
+/* Wrapper box */
+.bc-wpa-inline-selector {
+  margin: 20px 0;
+  padding: 15px;
+  border: 1px solid #e2e2e2;
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+/* Form layout */
+.bc-wpa-pin-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Label */
+.bc-wpa-pin-form label {
+  font-weight: 600;
+  margin-right: 10px;
+  white-space: nowrap;
+  
+}
+
+.bc-pincode-label label{
+    color: #242424;
+    font-weight: 600;
+}
+
+/* Input field */
+.bc-wpa-pin-form input[type="text"],
+.bc-wpa-pin-form input[list] {
+  flex: 1;
+  min-width: 180px;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+/* Button */
+.bc-wpa-pin-form button {
+  background: #0073aa;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out;
+}
+
+.bc-wpa-pin-form button:hover {
+  background: #005f8d;
+}
+.pincode_form_inline{
+    justify-content: space-around !important;
+    display: flex !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+    padding: 8px !important;
+    background: #f8f8f8;
+    border-radius: 8px !important;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.15) !important;
+}
+
+.pincode_form_inline .button {
+    color: #fff !important;
+    border-width: 0px !important;
+    outline: 0px !important;
+    border-radius: 8px !important;
+    letter-spacing: 1px !important;
+    font-size: 16px !important;
+    text-transform: uppercase !important;
+    background-color: rgb(127, 96, 81);
+    padding: 10px 30px !important;
+    max-width: 200px !important;
+    font-family: inherit !important;
+    font-weight: 600 !important;
+    cursor: pointer;
+    display: flex
+;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+}
+
+
+.pincode_form_inline input{
+    background-color: transparent !important;
+    color: #333333 !important;
+    padding: 0px 8px !important;
+    border: 0px !important;
+    outline: 0px !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    box-shadow: none !important;
+        flex-basis: 100% !important;
+}
+
+.pincode_form_inline .pin_marker {
+    max-width: 24px !important;
+}
+.bc-pincode-input{
+    display: flex !important
+;
+    flex-basis: 100% !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+}
+
+.pin_valid.text_small {
+    font-size: 12px !important;
+    margin: 0 !important;
+}
